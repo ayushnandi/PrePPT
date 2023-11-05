@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,72 +33,79 @@
             margin: 20px;
             padding: 10px 20px;
             font-size: 20px;
-            background: rgb(41,53,105);
-        background: linear-gradient(122deg, rgb(36, 74, 244) 0%, rgba(54,89,206,1) 48%, rgba(75,111,235,1) 100%);
+            background: rgb(41, 53, 105);
+            background: linear-gradient(122deg, rgb(36, 74, 244) 0%, rgba(54, 89, 206, 1) 48%, rgba(75, 111, 235, 1) 100%);
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             box-shadow: 0 0 10px rgb(86, 86, 184);
-            transition: background-color 0.5s ;
+            transition: background-color 0.5s;
             transition: transform 0.5s;
         }
-        button[type="submit"]:hover{
+
+        button[type="submit"]:hover {
             transform: translateY(-5px);
-            background: rgb(41,53,105);
-            background: linear-gradient(122deg, rgb(19, 57, 230) 0%, rgb(48, 88, 222) 48%, rgba(75,111,235,1) 100%);
+            background: rgb(41, 53, 105);
+            background: linear-gradient(122deg, rgb(19, 57, 230) 0%, rgb(48, 88, 222) 48%, rgba(75, 111, 235, 1) 100%);
         }
-
-
     </style>
 </head>
-<body>
-    <div><img src="the-batman-car-crash.gif" alt="">
-    <form action="#" method="post">
-        <label for="inputText">Enter Topic :</label>
-        <input type="text" id="inputText" name="message" required>
-        <br>
-        <button type="submit" value="Submit">Submit</button>
-        <div id="chat-log">   <!-- // All the messages will be stored here -->
 
+<body>
+    <div>
+        <img src="the-batman-car-crash.gif" alt="">
+        <form action="#" method="post">
+            <label for="inputText">Enter Topic:</label>
+            <input type="text" id="inputText" name="message" required>
+            <br>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="chat-log">
+            <!-- All the messages will be stored here -->
         </div>
     </div>
-    </form>
     <script>
         const chatLog = document.getElementById('chat-log');
-        const message = document.getElementById('message');
+        const inputText = document.getElementById('inputText');
         const form = document.querySelector('form');
-        from.addEventListener('submit', (e) =>{
+
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const messageText = message.value;
-            message.value='';
+            const messageText = inputText.value;
+            inputText.value = '';
+
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
             messageElement.classList.add('message--sent');
-            messageElement.innerHTML = 
-                `<div class="message__text"> ${messageText}</div>`;
+            messageElement.innerHTML = `<div class="message__text">${messageText}</div>`;
             chatLog.appendChild(messageElement);
+
             chatLog.scrollTop = chatLog.scrollHeight;
-            fetch('http://localhost:3000/',{
-                method:'POST',
-                headers:{
-                    'Content-Type': 'application/json'
+
+            fetch('http://localhost:3000/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    message: messageText
-                })
+                    message: messageText,
+                }),
             })
-            .then(res => res.json())
-            .then(data =>{
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message');
-                messageElement.classList.add('message--received');
-                messageElement.innerHTML = 
-                    `<div class="message__text"> ${data.completion.content}</div>`;
-                chatLog.appendChild(messageElement);
-                chatLog.scrollTop = chatLog.scrollHeight;
-            })
-        })
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data)
+                    const responseText = data.completion.message.content;
+                    const responseElement = document.createElement('div');
+                    responseElement.classList.add('message');
+                    responseElement.classList.add('message--received');
+                    responseElement.innerHTML = `<div class="message__text">${responseText}</div>`;
+                    chatLog.appendChild(responseElement);
+
+                    chatLog.scrollTop = chatLog.scrollHeight;
+                });
+        });
     </script>
 </body>
+
 </html>
