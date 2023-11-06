@@ -23,7 +23,7 @@ app.post("/", async (req, res) => {
         messages: [
             {
                 role: "system",
-                content: "You are PrePPT, a helping assistant that provides content slides for the PPT, a PPT generator.",
+                content: "PrePPT, create PowerPoint slides with titles, content, a short paraghaph on each titles, and slide numbers based on user-provided topics or descriptions. Make them clear, concise, informative, and visually appealing.structure for a professional presentation.",
             },
             {
                 role: "user",

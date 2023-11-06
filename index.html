@@ -69,7 +69,7 @@
         <label for="inputText">Enter Topic:</label>
         <input type="text" id="inputText" name="message" required />
         <br />
-        <button type="submit" onclick="generate()">Generate PPT</button>
+        <button type="submit">Generate PPT</button>
       </form>
       <div id="chat-log">
         <!-- All the messages will be stored here -->
@@ -106,6 +106,7 @@
           .then((data) => {
             console.log(data);
             const responseText = data.completion.message.content;
+            generate(responseText);
             const responseElement = document.createElement("div");
             responseElement.classList.add("message");
             responseElement.classList.add("message--received");
@@ -115,7 +116,7 @@
             chatLog.scrollTop = chatLog.scrollHeight;
           });
       });
-      function generate() {
+      function generate(responseText) {
         let pres = new PptxGenJS();
         let slide = pres.addSlide();
         let textboxText = responseText;
