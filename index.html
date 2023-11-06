@@ -1,111 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PrePPT</title>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            font-family: sans-serif;
-            align-items: center;
-            height: 100vh;
-            font-size: 25px;
-            margin: 0;
-        }
+      body {
+        display: flex;
+        justify-content: center;
+        font-family: sans-serif;
+        align-items: center;
+        height: 100vh;
+        font-size: 25px;
+        margin: 0;
+      }
 
-        form {
-            text-align: center;
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 0 10px rgba(0, 0, 0.8, 0.6);
-        }
+      form {
+        text-align: center;
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0.8, 0.6);
+      }
 
-        input[type="text"] {
-            padding: 10px;
-            width: 200px;
-        }
+      input[type="text"] {
+        padding: 10px;
+        width: 200px;
+      }
 
-        button[type="submit"] {
-            margin: 20px;
-            padding: 10px 20px;
-            font-size: 20px;
-            background: rgb(41, 53, 105);
-            background: linear-gradient(122deg, rgb(36, 74, 244) 0%, rgba(54, 89, 206, 1) 48%, rgba(75, 111, 235, 1) 100%);
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgb(86, 86, 184);
-            transition: background-color 0.5s;
-            transition: transform 0.5s;
-        }
+      button[type="submit"] {
+        margin: 20px;
+        padding: 10px 20px;
+        font-size: 20px;
+        background: rgb(41, 53, 105);
+        background: linear-gradient(
+          122deg,
+          rgb(36, 74, 244) 0%,
+          rgba(54, 89, 206, 1) 48%,
+          rgba(75, 111, 235, 1) 100%
+        );
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgb(86, 86, 184);
+        transition: background-color 0.5s;
+        transition: transform 0.5s;
+      }
 
-        button[type="submit"]:hover {
-            transform: translateY(-5px);
-            background: rgb(41, 53, 105);
-            background: linear-gradient(122deg, rgb(19, 57, 230) 0%, rgb(48, 88, 222) 48%, rgba(75, 111, 235, 1) 100%);
-        }
+      button[type="submit"]:hover {
+        transform: translateY(-5px);
+        background: rgb(41, 53, 105);
+        background: linear-gradient(
+          122deg,
+          rgb(19, 57, 230) 0%,
+          rgb(48, 88, 222) 48%,
+          rgba(75, 111, 235, 1) 100%
+        );
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div>
-        <img src="the-batman-car-crash.gif" alt="">
-        <form action="#" method="post">
-            <label for="inputText">Enter Topic:</label>
-            <input type="text" id="inputText" name="message" required>
-            <br>
-            <button type="submit">Submit</button>
-        </form>
-        <div id="chat-log">
-            <!-- All the messages will be stored here -->
-        </div>
+      <img src="the-batman-car-crash.gif" alt="" />
+      <form action="#" method="post">
+        <label for="inputText">Enter Topic:</label>
+        <input type="text" id="inputText" name="message" required />
+        <br />
+        <button type="submit" onclick="generate()">Generate PPT</button>
+      </form>
+      <div id="chat-log">
+        <!-- All the messages will be stored here -->
+      </div>
     </div>
     <script>
-        const chatLog = document.getElementById('chat-log');
-        const inputText = document.getElementById('inputText');
-        const form = document.querySelector('form');
+      const chatLog = document.getElementById("chat-log");
+      const inputText = document.getElementById("inputText");
+      const form = document.querySelector("form");
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const messageText = inputText.value;
-            inputText.value = '';
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const messageText = inputText.value;
+        inputText.value = "";
 
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
-            messageElement.classList.add('message--sent');
-            messageElement.innerHTML = `<div class="message__text">${messageText}</div>`;
-            chatLog.appendChild(messageElement);
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message");
+        messageElement.classList.add("message--sent");
+        messageElement.innerHTML = `<div class="message__text">${messageText}</div>`;
+        chatLog.appendChild(messageElement);
 
+        chatLog.scrollTop = chatLog.scrollHeight;
+
+        fetch("http://localhost:3000/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: messageText,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            const responseText = data.completion.message.content;
+            const responseElement = document.createElement("div");
+            responseElement.classList.add("message");
+            responseElement.classList.add("message--received");
+            
+            responseElement.innerHTML = `<div class="message__text">${responseText}</div>`;
+            chatLog.appendChild(responseElement);
             chatLog.scrollTop = chatLog.scrollHeight;
-
-            fetch('http://localhost:3000/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: messageText,
-                }),
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log(data)
-                    const responseText = data.completion.message.content;
-                    const responseElement = document.createElement('div');
-                    responseElement.classList.add('message');
-                    responseElement.classList.add('message--received');
-                    responseElement.innerHTML = `<div class="message__text">${responseText}</div>`;
-                    chatLog.appendChild(responseElement);
-
-                    chatLog.scrollTop = chatLog.scrollHeight;
-                });
-        });
+          });
+      });
+      function generate() {
+        let pres = new PptxGenJS();
+        let slide = pres.addSlide();
+        let textboxText = responseText;
+        let textboxOpts = { x: 1, y: 1, color: "363636" };
+        slide.addText(textboxText, textboxOpts);
+        pres.writeFile();
+      }
+      
     </script>
-</body>
-
+  </body>
 </html>
