@@ -5,34 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PrePPT</title>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
+      .pt-sans-narrow-regular {
+        font-family: "PT Sans Narrow", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      .pt-sans-narrow-bold {
+        font-family: "PT Sans Narrow", sans-serif;
+        font-weight: 700;
+        font-style: normal;
+      }
+
       body {
         display: flex;
-        justify-content: center;
-        font-family: sans-serif;
+        justify-content: space-between;
         align-items: center;
         height: 100vh;
         font-size: 25px;
-        margin: 0;
+        margin: 0 3rem;
+        gap: 10%;
+        cursor: auto;
+        background: rgb(194, 246, 244);
+        background: linear-gradient(
+          285deg,
+          rgba(194, 246, 244, 1) 1%,
+          rgba(135, 154, 188, 1) 42%,
+          rgba(49, 49, 49, 1) 100%
+        );
       }
 
       form {
         text-align: center;
         border: 1px solid #ccc;
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 0 10px rgba(0, 0, 0.8, 0.6);
+        padding: 7px;
+        display: inline-flexbox;
+        width: 30rem;
+        margin-left: 3rem;
+        border-radius: 20px;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        /* box-shadow: 0 0 10px rgba(0, 0, 0.8, 0.6); */
       }
 
       input[type="text"] {
-        padding: 10px;
-        width: 200px;
+        border: none;
+        padding: 1rem;
+        font-size: 1.2rem;
+        width: 13em;
+        border-radius: 1.5rem;
+        box-shadow: 0 0.4rem #dfd9d9;
+        cursor: pointer;
       }
 
       button[type="submit"] {
         margin: 20px;
         padding: 10px 20px;
         font-size: 20px;
+        transition: all 0.3s;
         background: rgb(41, 53, 105);
         background: linear-gradient(
           122deg,
@@ -45,34 +86,81 @@
         border-radius: 5px;
         cursor: pointer;
         box-shadow: 0 0 10px rgb(86, 86, 184);
-        transition: background-color 0.5s;
-        transition: transform 0.5s;
+        transition: background-color 0.5s, transform 0.3s all; /* Combine transitions */
+      }
+
+      .hero {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+      }
+
+
+      .leftHero {
+        position: relative;
+        font-family: PT Sans Narrow;
+        padding-top: -3rem;
+        font-size: 2.5rem;
+        display: flex-box;
+        max-width: 45rem;
+        color: #ccc;
+      }
+
+      .leftH2 h1 {
+        padding-left: 20px;
+        margin-top: -2rem;
+      }
+
+      .rightHero{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+       
+      }
+
+      img {
+        height: 92vh; 
+        border-radius: 10%;
       }
 
       button[type="submit"]:hover {
         transform: translateY(-5px);
+
         background: rgb(41, 53, 105);
         background: linear-gradient(
           122deg,
-          rgb(19, 57, 230) 0%,
-          rgb(48, 88, 222) 48%,
-          rgba(75, 111, 235, 1) 100%
+          rgb(165, 179, 243) 0%,
+          rgb(113, 129, 183) 48%,
+          rgb(167, 173, 196) 100%
         );
       }
     </style>
   </head>
 
   <body>
-    <div>
-      <img src="the-batman-car-crash.gif" alt="" />
-      <form action="#" method="post">
-        <label for="inputText">Enter Topic:</label>
-        <input type="text" id="inputText" name="message" required />
-        <br />
-        <button type="submit">Generate PPT</button>
-      </form>
-      <div id="chat-log">
-        <!-- All the messages will be stored here -->
+    <div class="hero">
+      <div class="leftHero">
+        <div class="leftH2">
+          <div>
+            <h1>BUILD YOUR AI-GENERATED PRESENTATION WITH OPENAI</h1>
+          </div>
+
+          <form action="#" method="post">
+            <label for="inputText">Enter Topic:</label>
+            <input type="text" id="inputText" placeholder="Type here.. " name="message" required />
+            <br />
+            <button type="submit">Generate PPT</button>
+          </form>
+        </div>
+        <div id="chat-log">
+          <!-- All the messages will be stored here -->
+        </div>
+      </div>
+      <div class="rightHero">
+        <div>
+          <img src="./arsenyrobo1.jpg" class="height:80vh" />
+        </div>
       </div>
     </div>
     <script>
@@ -110,7 +198,7 @@
             const responseElement = document.createElement("div");
             responseElement.classList.add("message");
             responseElement.classList.add("message--received");
-            
+
             responseElement.innerHTML = `<div class="message__text">${responseText}</div>`;
             chatLog.appendChild(responseElement);
             chatLog.scrollTop = chatLog.scrollHeight;
@@ -120,11 +208,11 @@
         let pres = new PptxGenJS();
         let slide = pres.addSlide();
         let textboxText = responseText;
+
         let textboxOpts = { x: 1, y: 1, color: "363636" };
         slide.addText(textboxText, textboxOpts);
         pres.writeFile();
       }
-      
     </script>
   </body>
 </html>
