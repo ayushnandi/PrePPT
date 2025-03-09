@@ -23,12 +23,9 @@ PrePPT is an AI-powered assistant that helps users create PowerPoint presentatio
 - **Hosting:** Netlify ([preppt-openai.netlify.app](https://preppt-openai.netlify.app/))
 
 ## Installation & Setup
-
-. setup in your system and then Pass Relevent OPEN-AI API key:
-   ```
+ 
+ setup in your system and then Pass Relevent OPEN-AI API key:
    open live with server 
-   ```
-4. Open your browser and go to `http://localhost:3000` to use the application.
 
 ## Usage
 - Enter a topic or description.
